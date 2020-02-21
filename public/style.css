@@ -2,6 +2,10 @@ body {
   font-family: sans-serif;
 }
 
+h3 {
+  text-align: center;
+}
+
 a {
   text-decoration: none;
 }
@@ -18,4 +22,10 @@ nav a {
 form div {
   margin: 1em;
   display: inline-block;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
