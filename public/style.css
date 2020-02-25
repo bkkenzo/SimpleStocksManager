@@ -29,3 +29,15 @@ form div {
   flex-direction: row;
   justify-content: space-around;
 }
+
+.transaction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.portfolio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
