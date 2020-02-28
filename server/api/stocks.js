@@ -1,6 +1,12 @@
 const router = require('express').Router()
-const {Stock} = require('../db/models')
+const {Stock, User, Transaction} = require('../db/models')
+const axios = require('axios')
 module.exports = router
+
+let apiKey
+if (process.env.NODE_ENV !== 'production') {
+  apiKey = require('../../secrets').ApiKey
+}
 
 router.get('/:id', async (req, res, next) => {
   const id = Number(req.params.id)
@@ -13,9 +19,56 @@ router.get('/:id', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
+  let userData
+  let apiData
+
+  const {userId, quantity, symbol} = req.body
   try {
-    const stock = await Stock.create(req.body)
-    res.json(stock)
+    apiData = await axios.get(
+      `https://cloud.iexapis.com/stable/stock/${symbol}/quote?token=${apiKey}`
+    )
+  } catch (err) {
+    next(err)
+  }
+
+  const {latestPrice, companyName} = apiData.data
+  const id = Number(userId)
+
+  try {
+    userData = await User.findOne({
+      where: {id: id}
+    })
+
+    const myCash = userData.dataValues.portfolio - latestPrice * quantity
+    if (myCash < 0) {
+      res.status(500).send({error: 'Not enough cash!'})
+      return
+    }
+
+    const oldStock = await Stock.findOrCreate({
+      where: {userId: id, symbol},
+      defaults: {quantity: 0, companyName, latestPrice}
+    })
+    const oldQty = oldStock[0].dataValues.quantity
+    await Stock.update(
+      {quantity: quantity + oldQty, latestPrice},
+      {where: {userId: id, symbol}}
+    )
+
+    User.update({portfolio: myCash}, {where: {id}})
+
+    Transaction.create({
+      symbol,
+      price: latestPrice,
+      quantity,
+      userId: id
+    })
+
+    res.json({
+      ...oldStock[0].dataValues,
+      quantity: quantity + oldQty,
+      portfolio: myCash
+    })
   } catch (err) {
     next(err)
   }

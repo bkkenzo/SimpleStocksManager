@@ -8,15 +8,11 @@ const Transaction = db.define('transaction', {
     allowNull: false
   },
   price: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.FLOAT,
     allowNull: false
   },
   quantity: {
     type: Sequelize.INTEGER,
-    allowNull: false
-  },
-  transactionType: {
-    type: Sequelize.ENUM('buy', 'sell'),
     allowNull: false
   }
 })

@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {getStocks, updateStocks} from '../store/index'
-import axios from 'axios'
 
 /**
  * COMPONENT
@@ -24,36 +23,17 @@ class UserHome extends React.Component {
     this.props.get_stocks(this.props.id)
   }
 
-  // const [stockState, setStocksState] = useState(stocks)
-  // useEffect(  () => {
-  //     const CDM = async () => {
-  //       console.log("Component did mount")
-  //       await get_stocks (id)
-  //       setStocksState(stocks)
-  //     }
-  //     CDM()
-  //     console.log("after calliong CDM")
-  //   }, []
-  // )
-
-  // useEffect(
-  //   async () => {
-  //     await get_stocks (id)
-  //   }, []
-  // )
-
   async submitButton(e) {
     e.preventDefault()
 
     const qty = Number(e.target.qty.value)
-    const symbol = e.target.symbol.value
+    const symbol = e.target.symbol.value.toUpperCase()
     await this.props.update_stocks({
       quantity: qty,
       symbol,
-      latestPrice: 3305,
-      userId: this.props.id,
-      companyName: 'PHILY'
+      userId: this.props.id
     })
+
     // const apiData = await axios.get(
     //   'https://cloud.iexapis.com/stable/stock/' +
     //     symbol +
@@ -99,7 +79,6 @@ class UserHome extends React.Component {
  * CONTAINER
  */
 const mapState = state => {
-  console.log('in map state', state.stocks)
   return {
     id: state.user.id,
     firstName: state.user.firstName,

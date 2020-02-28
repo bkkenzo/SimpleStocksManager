@@ -36,7 +36,7 @@ const User = db.define('user', {
     type: Sequelize.STRING
   },
   portfolio: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.FLOAT,
     defaultValue: 5000
   }
 })

@@ -26,7 +26,6 @@ export const getStocks = id => async dispatch => {
   try {
     const data = await axios.get(`/api/stocks/${id}`)
     const stocks = data.data
-    console.log(data.data)
     dispatch(gotStocks(stocks))
   } catch (error) {
     console.log(error)
@@ -37,7 +36,7 @@ export const updateStocks = transaction => async dispatch => {
   let stocks
   try {
     stocks = await axios.post(`/api/stocks`, transaction)
-    console.log('int the store >>>>>', stocks.data)
+    console.log('in the store action creator >>>>>', stocks.data)
     dispatch(updatedStocks(stocks.data))
   } catch (error) {
     dispatch(updatedStocks({error: error}))
@@ -56,9 +55,19 @@ export const updateStocks = transaction => async dispatch => {
 export default function(state = defaultStocks, action) {
   switch (action.type) {
     case GOT_STOCKS:
-      return {...state, stocks: [...state.stocks, ...action.stocks]}
+      return {...state, stocks: action.stocks}
     case UPDATED_STOCKS:
-      return {...state, stocks: [...state.stocks, action.stocks]}
+      console.log('in the stock reducer', action.stocks)
+      return {
+        ...state,
+        stocks: [
+          ...state.stocks.filter(
+            stock => stock.symbol !== action.stocks.symbol
+          ),
+          action.stocks
+        ]
+      }
+    // return {...state, stocks: [...state.stocks, action.stocks]}
     default:
       return state
   }

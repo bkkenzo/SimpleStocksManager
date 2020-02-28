@@ -11,7 +11,7 @@ const Stock = db.define('stock', {
     allowNull: false
   },
   latestPrice: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.FLOAT,
     allowNull: false
   },
   quantity: {
