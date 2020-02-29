@@ -5,17 +5,19 @@ import axios from 'axios'
  */
 const GOT_STOCKS = 'GOT_STOCKS'
 const UPDATED_STOCKS = 'UPDATED_STOCKS'
+const GOT_ERROR = 'GOT_ERROR'
 
 /**
  * INITIAL STATE
  */
-const defaultStocks = {stocks: []}
+const defaultStocks = {stocks: [], error: ''}
 
 /**
  * ACTION CREATORS
  */
 const gotStocks = stocks => ({type: GOT_STOCKS, stocks})
 const updatedStocks = stocks => ({type: UPDATED_STOCKS, stocks})
+const gotError = error => ({type: GOT_ERROR, error})
 
 /**
  * THUNK CREATORS
@@ -39,7 +41,8 @@ export const updateStocks = transaction => async dispatch => {
     console.log('in the store action creator >>>>>', stocks.data)
     dispatch(updatedStocks(stocks.data))
   } catch (error) {
-    dispatch(updatedStocks({error: error}))
+    console.log(error)
+    dispatch(gotError({error: error}))
   }
 
   // try {
@@ -55,7 +58,7 @@ export const updateStocks = transaction => async dispatch => {
 export default function(state = defaultStocks, action) {
   switch (action.type) {
     case GOT_STOCKS:
-      return {...state, stocks: action.stocks}
+      return {...state, stocks: action.stocks, error: ''}
     case UPDATED_STOCKS:
       console.log('in the stock reducer', action.stocks)
       return {
@@ -65,9 +68,15 @@ export default function(state = defaultStocks, action) {
             stock => stock.symbol !== action.stocks.symbol
           ),
           action.stocks
-        ]
+        ],
+        error: ''
       }
-    // return {...state, stocks: [...state.stocks, action.stocks]}
+    case GOT_ERROR:
+      console.log(action.error)
+      return {
+        ...state,
+        error: action.error
+      }
     default:
       return state
   }

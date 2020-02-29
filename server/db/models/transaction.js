@@ -4,7 +4,6 @@ const db = require('../db')
 const Transaction = db.define('transaction', {
   symbol: {
     type: Sequelize.STRING,
-    unique: true,
     allowNull: false
   },
   price: {

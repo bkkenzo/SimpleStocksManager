@@ -21,6 +21,10 @@ class UserHome extends React.Component {
 
   componentDidMount() {
     this.props.get_stocks(this.props.id)
+    console.log('error is', this.props.error)
+    if (this.props.error) {
+      window.alert('there is an error')
+    }
   }
 
   async submitButton(e) {
@@ -33,14 +37,7 @@ class UserHome extends React.Component {
       symbol,
       userId: this.props.id
     })
-
-    // const apiData = await axios.get(
-    //   'https://cloud.iexapis.com/stable/stock/' +
-    //     symbol +
-    //     '/quote?token=pk_c819bda3a3234f01a527b1a45b062dab'
-    // )
-
-    // console.log(apiData.data.latestPrice)
+    // clear the box
   }
 
   render() {
@@ -68,6 +65,9 @@ class UserHome extends React.Component {
               <input type="text" name="symbol" placeholder="Symbol" />
               <input type="submit" value="Buy" />
             </form>
+            {this.props.error ? (
+              <div>Unable to process your transaction</div>
+            ) : null}
           </div>
         </div>
       </div>
@@ -83,7 +83,8 @@ const mapState = state => {
     id: state.user.id,
     firstName: state.user.firstName,
     portfolio: state.user.portfolio,
-    stocks: state.stocks.stocks
+    stocks: state.stocks.stocks,
+    error: state.stocks.error
   }
 }
 
