@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {getStocks, updateStocks} from '../store/index'
-
+import Transactions from './Transactions'
 /**
  * COMPONENT
  */
@@ -21,10 +21,6 @@ class UserHome extends React.Component {
 
   componentDidMount() {
     this.props.get_stocks(this.props.id)
-    console.log('error is', this.props.error)
-    if (this.props.error) {
-      window.alert('there is an error')
-    }
   }
 
   async submitButton(e) {
@@ -70,6 +66,7 @@ class UserHome extends React.Component {
             ) : null}
           </div>
         </div>
+        <Transactions />
       </div>
     )
   }
