@@ -37,7 +37,7 @@ class UserHome extends React.Component {
   }
 
   render() {
-    const {firstName, portfolio, stocks} = this.props
+    const {firstName, myCash, stocks} = this.props
 
     return (
       <div>
@@ -55,7 +55,7 @@ class UserHome extends React.Component {
               : null}
           </div>
           <div className="transaction">
-            <div>Cash - ${portfolio}</div>
+            <div>Cash - ${myCash}</div>
             <form onSubmit={this.submitButton}>
               <input type="number" name="qty" placeholder="Qty" />
               <input type="text" name="symbol" placeholder="Symbol" />
@@ -66,7 +66,6 @@ class UserHome extends React.Component {
             ) : null}
           </div>
         </div>
-        <Transactions />
       </div>
     )
   }
@@ -79,7 +78,7 @@ const mapState = state => {
   return {
     id: state.user.id,
     firstName: state.user.firstName,
-    portfolio: state.user.portfolio,
+    myCash: state.stocks.myCash,
     stocks: state.stocks.stocks,
     error: state.stocks.error
   }

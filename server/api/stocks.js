@@ -12,7 +12,11 @@ router.get('/:id', async (req, res, next) => {
   const id = Number(req.params.id)
   try {
     const stocks = await Stock.findAll({where: {userId: id}})
-    res.json(stocks)
+    const user = await User.findOne({
+      where: {id}
+    })
+    // console.log(user.dataValues.portfolio)
+    res.json({stocks, myCash: user.dataValues.portfolio})
   } catch (err) {
     next(err)
   }
@@ -67,7 +71,7 @@ router.post('/', async (req, res, next) => {
     res.json({
       ...oldStock[0].dataValues,
       quantity: quantity + oldQty,
-      portfolio: myCash
+      myCash
     })
   } catch (err) {
     next(err)

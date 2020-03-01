@@ -10,7 +10,7 @@ const GOT_ERROR = 'GOT_ERROR'
 /**
  * INITIAL STATE
  */
-const defaultStocks = {stocks: [], error: ''}
+const defaultStocks = {stocks: [], error: '', myCash: 0}
 
 /**
  * ACTION CREATORS
@@ -24,11 +24,9 @@ const gotError = error => ({type: GOT_ERROR, error})
  */
 
 export const getStocks = id => async dispatch => {
-  // let stocks
   try {
-    const data = await axios.get(`/api/stocks/${id}`)
-    const stocks = data.data
-    dispatch(gotStocks(stocks))
+    const stocks = await axios.get(`/api/stocks/${id}`)
+    dispatch(gotStocks(stocks.data))
   } catch (error) {
     console.log(error)
   }
@@ -38,18 +36,11 @@ export const updateStocks = transaction => async dispatch => {
   let stocks
   try {
     stocks = await axios.post(`/api/stocks`, transaction)
-    console.log('in the store action creator >>>>>', stocks.data)
     dispatch(updatedStocks(stocks.data))
   } catch (error) {
     console.log(error)
     dispatch(gotError({error: error}))
   }
-
-  // try {
-  //   dispatch(updatedStocks(stocks.dataValues))
-  // } catch (error) {
-  //   console.error(error)
-  // }
 }
 
 /**
@@ -58,7 +49,12 @@ export const updateStocks = transaction => async dispatch => {
 export default function(state = defaultStocks, action) {
   switch (action.type) {
     case GOT_STOCKS:
-      return {...state, stocks: action.stocks, error: ''}
+      return {
+        ...state,
+        stocks: action.stocks.stocks,
+        myCash: action.stocks.myCash,
+        error: ''
+      }
     case UPDATED_STOCKS:
       console.log('in the stock reducer', action.stocks)
       return {
@@ -69,6 +65,7 @@ export default function(state = defaultStocks, action) {
           ),
           action.stocks
         ],
+        myCash: action.stocks.myCash,
         error: ''
       }
     case GOT_ERROR:

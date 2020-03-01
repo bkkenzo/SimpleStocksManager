@@ -18,7 +18,7 @@ class Transactions extends React.Component {
               ? transactions.map(el => {
                   return (
                     <div key={el.id}>
-                      {el.symbol} {el.quantity} {el.price * el.quantity}
+                      {el.createdAt} {el.quantity} {el.symbol} at {el.price}
                     </div>
                   )
                 })
