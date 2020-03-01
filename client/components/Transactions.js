@@ -17,8 +17,11 @@ class Transactions extends React.Component {
             {transactions
               ? transactions.map(el => {
                   return (
-                    <div key={el.id}>
-                      {el.createdAt} {el.quantity} {el.symbol} at {el.price}
+                    <div key={el.id} className="stocks">
+                      <div>
+                        BOUGHT ({el.symbol}) - {el.quantity} Shares @ {el.price}
+                      </div>
+                      <div>{el.createdAt.slice(0, 10)}</div>
                     </div>
                   )
                 })

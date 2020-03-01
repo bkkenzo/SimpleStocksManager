@@ -6,13 +6,6 @@ import Transactions from './Transactions'
 /**
  * COMPONENT
  */
-// const dummyStocks = [
-//   {symbol: 'APL', qty: 23, price: 250},
-//   {symbol: 'ABB', qty: 2, price: 20},
-//   {symbol: 'ABBV', qty: 22, price: 10},
-//   {symbol: 'ABCB', qty: 3, price: 51}
-// ]
-
 class UserHome extends React.Component {
   constructor() {
     super()
@@ -33,36 +26,46 @@ class UserHome extends React.Component {
       symbol,
       userId: this.props.id
     })
-    // clear the box
   }
 
   render() {
     const {firstName, myCash, stocks} = this.props
-
+    const titleStyle = {textAlign: 'center', fontWeight: 'bold'}
     return (
       <div>
         <h3>Welcome, {firstName}</h3>
         <div className="main">
           <div className="portfolio">
+            <div style={titleStyle}>Portfolio</div>
             {stocks
               ? stocks.map(el => {
                   return (
-                    <div key={el.id}>
-                      {el.symbol} {el.quantity} {el.latestPrice * el.quantity}
+                    <div key={el.id} className="stocks">
+                      <div className="left">
+                        {el.symbol} - {el.quantity} Shares{' '}
+                      </div>{' '}
+                      <div className="right">
+                        {' '}
+                        $ {Math.floor(el.latestPrice * el.quantity * 100) / 100}
+                      </div>
                     </div>
                   )
                 })
               : null}
           </div>
           <div className="transaction">
-            <div>Cash - ${myCash}</div>
+            <div style={titleStyle}>
+              Cash - $ {Math.floor(myCash * 100) / 100}
+            </div>
             <form onSubmit={this.submitButton}>
               <input type="number" name="qty" placeholder="Qty" />
               <input type="text" name="symbol" placeholder="Symbol" />
               <input type="submit" value="Buy" />
             </form>
             {this.props.error ? (
-              <div>Unable to process your transaction</div>
+              <div style={{color: 'red'}}>
+                Unable to process your transaction
+              </div>
             ) : null}
           </div>
         </div>
