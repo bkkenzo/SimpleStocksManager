@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {getStocks, updateStocks} from '../store/index'
-import Transactions from './Transactions'
 /**
  * COMPONENT
  */
@@ -100,6 +99,5 @@ export default connect(mapState, mapDispatch)(UserHome)
  * PROP TYPES
  */
 UserHome.propTypes = {
-  firstName: PropTypes.string,
-  portfolio: PropTypes.number
+  firstName: PropTypes.string
 }
