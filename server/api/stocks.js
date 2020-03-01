@@ -6,6 +6,8 @@ module.exports = router
 let apiKey
 if (process.env.NODE_ENV !== 'production') {
   apiKey = require('../../secrets').ApiKey
+} else {
+  apiKey = process.env.apiKey
 }
 
 router.get('/:id', async (req, res, next) => {
