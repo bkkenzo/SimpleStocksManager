@@ -29,6 +29,17 @@ router.post('/', async (req, res, next) => {
   let apiData
 
   const {userId, quantity, symbol} = req.body
+
+  if (quantity <= 0) {
+    const error = new Error('Internal server error')
+    error.response = {
+      status: 500,
+      statusText: 'Quantity should be greater than 0'
+    }
+    next(error.response)
+    return
+  }
+
   try {
     apiData = await axios.get(
       `https://cloud.iexapis.com/stable/stock/${symbol}/quote?token=${apiKey}`

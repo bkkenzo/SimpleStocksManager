@@ -38,7 +38,7 @@ export const updateStocks = transaction => async dispatch => {
     stocks = await axios.post(`/api/stocks`, transaction)
     dispatch(updatedStocks(stocks.data))
   } catch (error) {
-    dispatch(gotError({error: error.response.status}))
+    dispatch(gotError({error: error.response.data}))
   }
 }
 
@@ -69,10 +69,7 @@ export default function(state = defaultStocks, action) {
     case GOT_ERROR:
       return {
         ...state,
-        error:
-          action.error.error === 404
-            ? 'Stock Symbol Not Found'
-            : 'Not Enough Cash'
+        error: action.error.error
       }
     default:
       return state
