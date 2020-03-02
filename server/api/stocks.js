@@ -34,8 +34,9 @@ router.post('/', async (req, res, next) => {
       `https://cloud.iexapis.com/stable/stock/${symbol}/quote?token=${apiKey}`
     )
   } catch (err) {
-    console.log('in the api error is', err.res)
-    next(err)
+    console.error(err)
+    console.error(err.stack)
+    next(err.response)
   }
 
   const {latestPrice, companyName} = apiData.data
@@ -48,7 +49,9 @@ router.post('/', async (req, res, next) => {
 
     const myCash = userData.dataValues.portfolio - latestPrice * quantity
     if (myCash < 0) {
-      res.status(500).send({error: 'Not enough cash!'})
+      const error = new Error('Internal server error')
+      error.response = {status: 500, statusText: 'Not Enough Cash'}
+      next(error.response)
       return
     }
 

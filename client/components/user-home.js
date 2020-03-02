@@ -90,9 +90,7 @@ class UserHome extends React.Component {
               <input type="submit" value="Buy" />
             </form>
             {this.props.error ? (
-              <div style={{color: 'red'}}>
-                Unable to process your transaction
-              </div>
+              <div style={{color: 'red'}}>{this.props.error}</div>
             ) : null}
           </div>
         </div>

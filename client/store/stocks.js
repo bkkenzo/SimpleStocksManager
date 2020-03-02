@@ -28,7 +28,7 @@ export const getStocks = id => async dispatch => {
     const stocks = await axios.get(`/api/stocks/${id}`)
     dispatch(gotStocks(stocks.data))
   } catch (error) {
-    console.log(error)
+    console.log('in the error reducer ')
   }
 }
 
@@ -38,8 +38,7 @@ export const updateStocks = transaction => async dispatch => {
     stocks = await axios.post(`/api/stocks`, transaction)
     dispatch(updatedStocks(stocks.data))
   } catch (error) {
-    console.log('in the store error is', error)
-    dispatch(gotError({error: error}))
+    dispatch(gotError({error: error.response.status}))
   }
 }
 
@@ -56,7 +55,6 @@ export default function(state = defaultStocks, action) {
         error: ''
       }
     case UPDATED_STOCKS:
-      console.log('in the stock reducer', action.stocks)
       return {
         ...state,
         stocks: [
@@ -69,10 +67,12 @@ export default function(state = defaultStocks, action) {
         error: ''
       }
     case GOT_ERROR:
-      console.log(action.error)
       return {
         ...state,
-        error: action.error
+        error:
+          action.error.error === 404
+            ? 'Stock Symbol Not Found'
+            : 'Not Enough Cash'
       }
     default:
       return state
