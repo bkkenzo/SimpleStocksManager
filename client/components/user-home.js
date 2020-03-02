@@ -8,7 +8,12 @@ import {getStocks, updateStocks} from '../store/index'
 class UserHome extends React.Component {
   constructor() {
     super()
+    this.state = {
+      qty: '',
+      symbol: ''
+    }
     this.submitButton = this.submitButton.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
 
   componentDidMount() {
@@ -18,13 +23,24 @@ class UserHome extends React.Component {
   async submitButton(e) {
     e.preventDefault()
 
-    const qty = Number(e.target.qty.value)
-    const symbol = e.target.symbol.value.toUpperCase()
+    const qty = this.state.qty
+    const symbol = this.state.symbol.toUpperCase()
     await this.props.update_stocks({
       quantity: qty,
       symbol,
       userId: this.props.id
     })
+    this.setState({
+      qty: '',
+      symbol: ''
+    })
+  }
+
+  onChange(e) {
+    const name = e.target.name
+    const value = name === 'qty' ? Number(e.target.value) : e.target.value
+    // console.log("value is", e.target.name)
+    this.setState({[name]: value})
   }
 
   render() {
@@ -57,8 +73,20 @@ class UserHome extends React.Component {
               Cash - $ {Math.floor(myCash * 100) / 100}
             </div>
             <form onSubmit={this.submitButton}>
-              <input type="number" name="qty" placeholder="Qty" />
-              <input type="text" name="symbol" placeholder="Symbol" />
+              <input
+                type="number"
+                name="qty"
+                placeholder="Qty"
+                onChange={this.onChange}
+                value={this.state.qty}
+              />
+              <input
+                type="text"
+                name="symbol"
+                placeholder="Symbol"
+                onChange={this.onChange}
+                value={this.state.symbol}
+              />
               <input type="submit" value="Buy" />
             </form>
             {this.props.error ? (

@@ -33,9 +33,8 @@ router.post('/', async (req, res, next) => {
     apiData = await axios.get(
       `https://cloud.iexapis.com/stable/stock/${symbol}/quote?token=${apiKey}`
     )
-
-    console.log(apiData)
   } catch (err) {
+    console.log('in the api error is', err.res)
     next(err)
   }
 

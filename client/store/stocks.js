@@ -38,7 +38,7 @@ export const updateStocks = transaction => async dispatch => {
     stocks = await axios.post(`/api/stocks`, transaction)
     dispatch(updatedStocks(stocks.data))
   } catch (error) {
-    console.log(error)
+    console.log('in the store error is', error)
     dispatch(gotError({error: error}))
   }
 }
